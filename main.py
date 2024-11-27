@@ -5,7 +5,7 @@ import hashlib
 app = Flask("Website")
 app.secret_key = db.getHash("super secret key")
 
-@app.route("/favicon.png")
+@app.route("/favicon.ico")
 def get_image():
     return send_file("files/favicon.png", mimetype="image/png")
 
