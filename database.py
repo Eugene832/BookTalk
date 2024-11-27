@@ -1,36 +1,39 @@
 import sqlite3
 import hashlib
 
-class Database:
-    def __init__(self, db_name="files/authorisation.db"):
-        self.conn = sqlite3.connect(db_name)
-        self.cursor = self.conn.cursor()
-        self.cursor.execute("""
-        CREATE TABLE IF NOT EXISTS dictionary (
-            key TEXT PRIMARY KEY,
-            value TEXT
-        )
-        """)
-        self.conn.commit()
+db_name = "files/authorisation.db"
 
-    def setPassword(self, login, password):
-        sha256Hash = hashlib.sha256(password.encode()).hexdigest()
-        self.cursor.execute("""
-        INSERT INTO dictionary (key, value) VALUES (?, ?)
-        ON CONFLICT(key) DO UPDATE SET value = excluded.value
-        """, (login, sha256Hash))
-        self.conn.commit()
+def getHash(s):
+    return hashlib.sha256(s.encode()).hexdigest()
 
-    def getHash(self, login):
-        self.cursor.execute("""
-        SELECT value FROM dictionary WHERE key = ?
-        """, (login,))
-        result = self.cursor.fetchone()
-        return result[0] if result else None
+def init():
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS dictionary (
+        key TEXT PRIMARY KEY,
+        value TEXT
+    )
+    """)
+    conn.commit()    
 
-    def close(self):
-        self.conn.close()
+def getPasswordHash(username):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT value FROM dictionary WHERE key = ?
+    """, (username,))
+    result = cursor.fetchone()
+    return result[0] if result else None    
 
-database = Database()
-database.setPassword("example", "password")
-print(database.getHash("example"))
+def setPassword(username, password):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()    
+    sha256Hash = hashlib.sha256(password.encode()).hexdigest()
+    cursor.execute("""
+    INSERT INTO dictionary (key, value) VALUES (?, ?)
+    ON CONFLICT(key) DO UPDATE SET value = excluded.value
+    """, (username, sha256Hash))
+    conn.commit()
+    
+init()
