@@ -1,10 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Website</title>
-    <link rel="icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Scrolling Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .book {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+
+        .book:last-child {
+            border-bottom: none;
+        }
+
+        .book h2 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .book p {
+            margin: 5px 0;
+        }
+
+        .book-content {
+            font-size: 14px;
+            color: #555;
+            white-space: pre-wrap;
+            height: 200px;
+            overflow-y: scroll;
+        }
+        
+        .book-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .book-content::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 4px;
+        }
+
+        .book-content::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Welcome to my Website!</h1>
+    <div class="container">
+        <h1>Published Books</h1>
+        <div id="books-container">
+            <!-- Здесь будут отображаться книги -->
+        </div>
+    </div>
+
+    <script>
+        let offset = 0; // Смещение для следующей порции данных
+        const limit = 5; // Количество записей за раз
+        let isLoading = false; // Флаг, чтобы избежать параллельных запросов
+        const container = document.getElementById("books-container");
+
+        // Функция для загрузки книг
+        async function loadBooks() {
+            if (isLoading) return; // Если данные уже загружаются, выходим
+
+            isLoading = true;
+
+            try {
+                const response = await fetch(`/books?offset=${offset}&limit=${limit}`);
+                const books = await response.json();
+
+                // Добавляем книги в контейнер
+                books.forEach(book => {
+                    const bookDiv = document.createElement("div");
+                    bookDiv.classList.add("book");
+
+                    bookDiv.innerHTML = `
+                        <h2>${book[2]} (by ${book[1]})</h2>
+                        <p><strong>ID:</strong> ${book[0]}</p>
+                        <div class="book-content">${book[3]}</div>
+                    `;
+                    container.appendChild(bookDiv);
+                });
+
+                // Обновляем смещение
+                offset += books.length;
+                console.log("Hey!");
+            } catch (error) {
+                console.error("Error loading books:", error);
+            } finally {
+                isLoading = false;
+            }
+            window.dispatchEvent(new Event('scroll'));
+        }
+
+        // Обработчик прокрутки страницы
+        window.addEventListener("scroll", () => {
+            const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+            if (nearBottom) {
+                loadBooks();
+            }
+        });
+
+        console.log("first");
+        loadBooks();
+    </script>
 </body>
 </html>
