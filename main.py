@@ -47,13 +47,13 @@ def login():
         
         hashed_password = db.getPasswordHash(username)
         if not hashed_password:
-            return jsonify({"message": "Username does not exist!", "category": "error"}), 400
+            return jsonify({"message": "Username does not exist!", "category": "error"}), 200
         
         if (hashed_password != db.getHash(password)):
-            return jsonify({"message": "Invalid password!", "category": "error"}), 400
+            return jsonify({"message": "Invalid password!", "category": "error"}), 200
         
         session["username"] = username
-        return jsonify({"redirect" : "/", "message": "Logged in!", "category": "success"}), 400
+        return jsonify({"redirect" : "/", "message": "Logged in!", "category": "success"}), 200
     
     return render_template("login.html")
 
