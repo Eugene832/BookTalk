@@ -12,7 +12,7 @@ def get_image():
 
 @app.route("/")
 def home():
-    if "user_id" in session:
+    if "username" in session:
         return render_template("mainpage.html")
     return render_template("login_or_register.html")
 
@@ -31,7 +31,8 @@ def register():
             return jsonify({"message": "Username already exists!", "category": "error"}), 400
         else:
             db.setPassword(username, password)
-            return jsonify({"redirect" : "/login", "message": "Registration successful!", "category": "success"}), 400
+            session["username"] = username
+            return jsonify({"redirect" : "/", "message": "Registration successful!", "category": "success"}), 400
     return render_template("register.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -51,7 +52,7 @@ def login():
         if (hashed_password != db.getHash(password)):
             return jsonify({"message": "Invalid password!", "category": "error"}), 400
         
-        session["user_id"] = username
+        session["username"] = username
         return jsonify({"redirect" : "/", "message": "Logged in!", "category": "success"}), 400
     
     return render_template("login.html")
