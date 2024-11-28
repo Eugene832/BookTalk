@@ -17,6 +17,13 @@ def init():
         value TEXT
     )
     """)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS texts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author TEXT NOT NULL,
+    text TEXT NOT NULL
+    );
+    """)    
     conn.commit()    
 
 def getPasswordHash(username):

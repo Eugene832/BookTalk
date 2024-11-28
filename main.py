@@ -9,7 +9,6 @@ app.secret_key = db.sekretKey
 def get_image():
     return send_file("files/favicon.png", mimetype="image/png")
 
-
 @app.route("/")
 def home():
     if "username" in session:
