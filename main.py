@@ -3,7 +3,7 @@ import database as db
 import hashlib
 
 app = Flask("Website")
-app.secret_key = db.getHash("super secret key")
+app.secret_key = db.sekretKey
 
 @app.route("/favicon.ico")
 def get_image():
@@ -57,5 +57,11 @@ def login():
     
     return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    session.pop('username', None)
+    return redirect("/")
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+    

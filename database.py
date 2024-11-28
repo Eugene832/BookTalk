@@ -2,8 +2,10 @@ import sqlite3
 import hashlib
 
 db_name = "files/authorisation.db"
+sekretKey = "3fac1504251a027465981346fb5b0d57d398e4df4a03253a4c7d1926e40e9907"
 
 def getHash(s):
+    s += sekretKey
     return hashlib.sha256(s.encode()).hexdigest()
 
 def init():
@@ -29,7 +31,7 @@ def getPasswordHash(username):
 def setPassword(username, password):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()    
-    sha256Hash = hashlib.sha256(password.encode()).hexdigest()
+    sha256Hash = getHash(password)
     cursor.execute("""
     INSERT INTO dictionary (key, value) VALUES (?, ?)
     ON CONFLICT(key) DO UPDATE SET value = excluded.value
