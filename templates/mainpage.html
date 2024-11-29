@@ -1,23 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinite Scrolling Books</title>
+    <title>Published Books</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: montserrat;
             margin: 20px;
-            background-color: #f9f9f9;
+            background-color: #453e38;
+            padding-top: 50px;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+        .top-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #be461e;
+            color: white;
+            padding-left: 5px;
+            padding-top: 7px;
+            padding-bottom: 5px;
+            padding-right: 5px;
+            z-index: 1000;
         }
 
         h1 {
@@ -27,12 +33,13 @@
         }
 
         .book {
-            border-bottom: 1px solid #ddd;
-            padding: 15px 0;
-        }
-
-        .book:last-child {
-            border-bottom: none;
+            margin: 0 auto;
+            padding: 15px;
+            max-width: 800px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
         .book h2 {
@@ -48,10 +55,10 @@
             font-size: 14px;
             color: #555;
             white-space: pre-wrap;
-            height: 200px;
+            height: 400px;
             overflow-y: scroll;
         }
-        
+
         .book-content::-webkit-scrollbar {
             width: 8px;
         }
@@ -65,14 +72,21 @@
             background-color: #555;
         }
 
+        .logo {
+            top: 10px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Published Books</h1>
-        <div id="books-container">
-            <!-- Здесь будут отображаться книги -->
-        </div>
+    <div class="top-panel">
+        <img src="/favicon.ico" class="logo">
+    </div>
+
+    <div id="books-container">
+        <!-- Здесь будут отображаться книги -->
     </div>
 
     <script>
@@ -95,6 +109,7 @@
                     const bookDiv = document.createElement("div");
                     bookDiv.classList.add("book");
 
+                    // Используем правильный синтаксис для шаблонных литералов
                     bookDiv.innerHTML = `
                         <h2>${book[2]} (by ${book[1]})</h2>
                         <p><strong>ID:</strong> ${book[0]}</p>
@@ -102,13 +117,19 @@
                     `;
                     container.appendChild(bookDiv);
                 });
+
                 offset += books.length;
-                if (books.length==0) hasMore = false;
+
+                if (books.length === 0) {
+                    hasMore = false; // Если нет больше книг, останавливаем подгрузку
+                }
             } catch (error) {
                 console.error("Error loading books:", error);
             } finally {
                 isLoading = false;
             }
+
+            // Инициируем проверку прокрутки снова
             window.dispatchEvent(new Event('scroll'));
         }
 
@@ -120,7 +141,7 @@
             }
         });
 
-        console.log("first");
+        // Загружаем книги сразу при загрузке страницы
         loadBooks();
     </script>
 </body>
