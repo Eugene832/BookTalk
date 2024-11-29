@@ -5,8 +5,12 @@ import hashlib
 app = Flask("Website")
 app.secret_key = db.sekretKey
 
+@app.route("/background.png")
+def background():
+    return send_file("files/background.png", mimetype="image/png")
+
 @app.route("/favicon.ico")
-def get_image():
+def favicon():
     return send_file("files/favicon.png", mimetype="image/png")
 
 @app.route("/books", methods=["GET"])
@@ -19,9 +23,9 @@ def books():
 
 @app.route("/")
 def home():
-    if "username" in session:
-        return render_template("mainpage.html")
-    return render_template("login_or_register.html")
+    #if "username" in session:
+    #    return render_template("mainpage.html")
+    return render_template("mainpage.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
