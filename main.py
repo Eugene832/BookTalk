@@ -9,6 +9,14 @@ app.secret_key = db.sekretKey
 def get_image():
     return send_file("files/favicon.png", mimetype="image/png")
 
+@app.route("/books", methods=["GET"])
+def books():
+    if "username" not in session: return redirect("/")
+    offset = int(request.args.get("offset", 0))
+    limit = int(request.args.get("limit", 5))
+    books = db.getBooksBatch(offset, limit)
+    return jsonify(books)
+
 @app.route("/")
 def home():
     if "username" in session:
@@ -61,19 +69,25 @@ def logout():
     session.pop('username', None)
     return redirect("/")
 
+@app.route("/add_book", methods=["POST"])
+def add_book():
+    if "username" not in session: return None, 400
+    data = request.get_json()
+    title = data.get('title')
+    content = data.get('content')
+
+    if not title or not content:
+        return jsonify({"message": "Title and content are required."}), 200
+
+    db.addBook(session["username"], title, content)
+
+    return jsonify({"redirect": "/"}), 200
+
 @app.route("/publication")
 def publication():
     if "username" not in session:
         return redirect("/")
     return render_template("publication.html")
-
-@app.route("/books", methods=["GET"])
-def books():
-    if "username" not in session: return redirect("/")
-    offset = int(request.args.get("offset", 0))
-    limit = int(request.args.get("limit", 5))
-    books = db.getBooksBatch(offset, limit)
-    return jsonify(books)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publish Your Book</title>
+    <title>Add New Book</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 20px;
             background-color: #f9f9f9;
         }
 
         .container {
-            max-width: 800px;
-            margin: 20px auto;
+            max-width: 600px;
+            margin: 0 auto;
             background: white;
             padding: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -27,108 +26,85 @@
             margin-bottom: 20px;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
+        label {
+            font-size: 16px;
             display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
-        .form-group input, .form-group textarea {
+        input, textarea {
             width: 100%;
             padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
             border-radius: 4px;
+            font-size: 16px;
         }
 
-        .form-group textarea {
-            height: 150px;
-            resize: none;
-        }
-
-        .form-group button {
-            background-color: #4CAF50;
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
             color: white;
             border: none;
-            padding: 10px 15px;
             border-radius: 4px;
             font-size: 16px;
             cursor: pointer;
         }
 
+        button:hover {
+            background-color: #218838;
+        }
+
         .message {
-            padding: 10px;
-            margin-top: 15px;
-            border-radius: 4px;
-        }
-
-        .message.success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .message.error {
-            background-color: #f8d7da;
-            color: #721c24;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Publish Your Book</h1>
-        <form id="book-form">
-            <div class="form-group">
-                <label for="title">Book Title:</label>
-                <input type="text" id="title" name="title" placeholder="Enter the title of your book" required>
-            </div>
-            <div class="form-group">
-                <label for="content">Book Content (Text):</label>
-                <textarea id="content" name="content" placeholder="Paste the text of your book here"></textarea>
-            </div>
-            <div id="message-container"></div>
-            <div class="form-group">
-                <button type="submit">Publish</button>
-            </div>
+        <h1>Add New Book</h1>
+        <form id="add-book-form" method="POST">
+            <label for="title">Book Title</label>
+            <input type="text" id="title" name="title" placeholder="Enter the title of the book" required>
+
+            <label for="content">Book Content</label>
+            <textarea id="content" name="content" rows="10" placeholder="Enter the content of the book" required></textarea>
+
+            <button type="submit">Add Book</button>
         </form>
+
+        <div id="message" class="message"></div>
     </div>
 
     <script>
-        document.getElementById("book-form").addEventListener("submit", async function (event) {
+        document.getElementById('add-book-form').addEventListener('submit', async function(event) {
             event.preventDefault();
 
-            const title = document.getElementById("title").value;
-            const content = document.getElementById("content").value;
-
-            const formData = new FormData();
-            formData.append("title", title);
-            formData.append("description", description);
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
 
             try {
-                const response = await fetch("/publish", {
-                    method: "POST",
-                    body: formData
+                const response = await fetch('/add_book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
                 });
 
                 const result = await response.json();
                 if (result.redirect) {
                     window.location.href = result.redirect;
                 } else {
-                    showMessage(result.message, result.category);
+                    document.getElementById('message').textContent = result.message || 'Error occurred while adding the book.';
                 }
             } catch (error) {
-                console.error("Error:", error);
-                showMessage("An error occurred while publishing the book. Please try again.", "error");
+                document.getElementById('message').textContent = 'Error occurred while adding the book.';
+                console.error(error);
             }
         });
-
-        function showMessage(message, type) {
-            const messageContainer = document.getElementById("message-container");
-            messageContainer.innerHTML = `<div class="message ${type}">${message}</div>`;
-        }
     </script>
 </body>
 </html>
