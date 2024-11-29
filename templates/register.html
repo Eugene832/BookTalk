@@ -1,10 +1,116 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Register</title>
-    <link rel="icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #463d38;
+            color: #ffffff;
+        }
+
+        .navbar {
+            display: flex;
+            position: fixed;
+            top: 0;
+            width: 100%; /* Полная ширина */
+            align-items: center;
+            justify-content: space-between;
+            background-color: #b34820;
+            padding: 10px 10px;
+        }
+
+        .navbar .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .navbar nav a {
+            margin: 0 15px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar nav a:hover {
+            text-decoration: underline;
+        }
+
+        .registration-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 100px);
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        .registration-header {
+            font-size: 24px;
+            background-color: #b34820;
+            color: #ffffff;
+            padding: 10px 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .registration-form {
+            background-color: #b34820;
+            border-radius: 15px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .registration-form label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .registration-form input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 10px;
+            background-color: #e3c6ae;
+            font-size: 14px;
+            color: #463d38;
+        }
+
+        .registration-form input::placeholder {
+            color: #766e66;
+        }
+
+        .registration-form button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 15px;
+            background-color: #7e2d14;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .registration-form button:hover {
+            background-color: #5e2110;
+        }
+
         .message-error {
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            text-align: center;
             background-color: #f8d7da;
             color: #721c24;
             border-color: #f5c6cb;
@@ -12,17 +118,27 @@
     </style>
 </head>
 <body>
-    <div id="flash-container"></div>
-
-    <h1>Register</h1>
-    <form id="register-form">
-        <input type="text" name="username" placeholder="Username" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
-        <button type="submit">Register</button>
-    </form>
-
+    <div class="navbar">
+        <img src="/favicon.ico" alt="Logo" class="logo">
+        <nav>
+            <a href="#">Главная</a>
+            <a href="#">Войти</a>
+            <a href="#">Зарегистрироваться</a>
+        </nav>
+    </div>
+    <div class="registration-container">
+        <div class="registration-header">Регистрация</div>
+        <form id="registration-form" class="registration-form">
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" placeholder="Введите имя">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" placeholder="Введите пароль">
+            <button type="submit">Зарегистрироваться</button>
+            <div id="flash-container"></div>
+        </form>
+    </div>
     <script>
-        document.getElementById("register-form").addEventListener("submit", async function(event) {
+        document.getElementById("registration-form").addEventListener("submit", async function(event) {
             event.preventDefault();
             const formData = new FormData(event.target);
             const data = Object.fromEntries(formData.entries());
@@ -36,13 +152,13 @@
                 if (result.redirect) {
                     window.location.href = result.redirect;
                 } else {
-		    const flashContainer = document.getElementById("flash-container");
-		    flashContainer.innerHTML = `
-		        <div class="flash-message message-${result.category}">
-		            ${result.message}
-		        </div>
-		    `;
-		}
+                    const flashContainer = document.getElementById("flash-container");
+                    flashContainer.innerHTML = `
+                        <div class="flash-message message-${result.category}">
+                            ${result.message}
+                        </div>
+                    `;
+                }
             } catch (error) {
                 console.error("Error:", error);
             }

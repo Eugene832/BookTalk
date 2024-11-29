@@ -15,7 +15,6 @@ def favicon():
 
 @app.route("/books", methods=["GET"])
 def books():
-    if "username" not in session: return redirect("/")
     offset = int(request.args.get("offset", 0))
     limit = int(request.args.get("limit", 5))
     books = db.getBooksBatch(offset, limit)
