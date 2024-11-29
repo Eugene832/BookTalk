@@ -76,14 +76,14 @@
     </div>
 
     <script>
-        let offset = 0; // Смещение для следующей порции данных
-        const limit = 5; // Количество записей за раз
-        let isLoading = false; // Флаг, чтобы избежать параллельных запросов
+        let offset = 0;
+        const limit = 5;
+        let isLoading = false;
+        let hasMore = true;
         const container = document.getElementById("books-container");
 
-        // Функция для загрузки книг
         async function loadBooks() {
-            if (isLoading) return; // Если данные уже загружаются, выходим
+            if (!hasMore || isLoading) return;
 
             isLoading = true;
 
@@ -91,7 +91,6 @@
                 const response = await fetch(`/books?offset=${offset}&limit=${limit}`);
                 const books = await response.json();
 
-                // Добавляем книги в контейнер
                 books.forEach(book => {
                     const bookDiv = document.createElement("div");
                     bookDiv.classList.add("book");
@@ -103,10 +102,8 @@
                     `;
                     container.appendChild(bookDiv);
                 });
-
-                // Обновляем смещение
                 offset += books.length;
-                console.log("Hey!");
+                if (books.length==0) hasMore = false;
             } catch (error) {
                 console.error("Error loading books:", error);
             } finally {
