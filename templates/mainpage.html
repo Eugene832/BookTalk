@@ -28,26 +28,26 @@
             padding-bottom: 5px;
             padding-right: 5px;
             z-index: 1000;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .book {
             background-color: #ac775b;
             margin: 0 auto;
-            padding: 15px;
+            padding: 0;
             max-width: 800px;
             margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
-        .book h2 {
-            font-size: 20px;
+        .book h1 {
+            color: white;
+            display: flex;
+            justify-content: center;
+            font-size: 32px;
             margin: 0;
         }
 
@@ -61,9 +61,38 @@
             white-space: pre-wrap;
             padding-left: 5px;
             padding-right: 5px;
-            border-radius: 4px;
             height: 400px;
             overflow-y: scroll;
+        }
+        
+        .book-content {
+            background-color: #D9D8D6;
+            font-size: 14px;
+            white-space: pre-wrap;
+            padding-left: 5px;
+            padding-right: 5px;
+            height: 400px;
+            overflow-y: scroll;
+        }
+
+        .review {
+            display: flex;
+            justify-content: center;
+            background-color: #D9D8D6;
+            padding: 5px;
+            height: 40px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .button-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
         }
 
         .book-content::-webkit-scrollbar {
@@ -72,7 +101,6 @@
 
         .book-content::-webkit-scrollbar-thumb {
             background-color: #888;
-            border-radius: 4px;
         }
 
         .book-content::-webkit-scrollbar-thumb:hover {
@@ -85,11 +113,27 @@
             width: 40px;
             height: 40px;
         }
+
+        .top-panel nav a {
+            margin: 0 15px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .top-panel nav a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="top-panel">
         <img src="/favicon.ico" class="logo">
+        <nav>
+            <a href="/publication">Опубликовать</a>
+            <a href="/login">Войти</a>
+            <a href="/register">Зарегистрироваться</a>
+        </nav>
     </div>
 
     <div id="books-container">
@@ -116,11 +160,12 @@
                     const bookDiv = document.createElement("div");
                     bookDiv.classList.add("book");
 
-                    // Используем правильный синтаксис для шаблонных литералов
                     bookDiv.innerHTML = `
-                        <h2>${book[2]} (by ${book[1]})</h2>
-                        <p><strong>ID:</strong> ${book[0]}</p>
+                        <h1>${book[2]} (by ${book[1]})</h1>
                         <div class="book-content">${book[3]}</div>
+                        <div class="review">
+                        <a href="/review" class="button-link">Оставить рецензию</a>
+                        </div>
                     `;
                     container.appendChild(bookDiv);
                 });
@@ -128,7 +173,7 @@
                 offset += books.length;
 
                 if (books.length === 0) {
-                    hasMore = false; // Если нет больше книг, останавливаем подгрузку
+                    hasMore = false;
                 }
             } catch (error) {
                 console.error("Error loading books:", error);
@@ -136,11 +181,9 @@
                 isLoading = false;
             }
 
-            // Инициируем проверку прокрутки снова
             window.dispatchEvent(new Event('scroll'));
         }
 
-        // Обработчик прокрутки страницы
         window.addEventListener("scroll", () => {
             const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
             if (nearBottom) {
@@ -148,7 +191,6 @@
             }
         });
 
-        // Загружаем книги сразу при загрузке страницы
         loadBooks();
     </script>
 </body>

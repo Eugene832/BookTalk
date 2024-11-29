@@ -64,6 +64,7 @@
         h1 {
             font-size: 24px;
             color: #333;
+            margin-bottom: 10px;
         }
 
         label {
@@ -72,9 +73,9 @@
             margin-bottom: 8px;
         }
 
-        input, textarea {
+        input {
             border: 2px solid black;
-            border-radius: 2px;
+            border-radius: 5px;
             width: 97%;
             padding: 10px;
             margin-bottom: 20px;
@@ -83,16 +84,31 @@
             color: #463d38;
         }
 
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px; /* Добавляем небольшой отступ между кнопками */
+        }
+
         button {
-            padding: 10px 20px;
-            width: 100%;
+            padding: 8px 15px; /* Уменьшаем отступы */
             background-color: #be461e;
             color: white;
             border: none;
             border-radius: 15px;
-            font-size: 16px;
+            font-size: 14px; /* Уменьшаем размер шрифта */
             cursor: pointer;
             transition: background-color 0.3s ease;
+        }
+
+        /* Меньшая кнопка "Отправить" */
+        button[type="submit"] {
+            width: 40%; /* Уменьшаем ширину */
+        }
+
+        /* Кнопка "Посмотреть рецензии" больше */
+        button[type="button"] {
+            width: 55%; /* Увеличиваем ширину */
         }
 
         button:hover {
@@ -127,43 +143,21 @@
 
     <div class="container">
         <form id="add-book-form" method="POST">
-            <h1>Введите название произведения</h1>
-            <input type="text" id="title" name="title">
-            <h1>Введите текст произведения</h1>
-            <textarea id="content" name="content" rows="10"></textarea>
-            <button type="submit">Добавить произведение</button>
+            <h1>Сюжет</h1>
+            <input type="text" id="1" name="1">
+            <h1>Логичность</h1>
+            <input type="text" id="2" name="2">
+            <h1>Оригинальность</h1>
+            <input type="text" id="3" name="3">
+            <h1>Язык</h1>
+            <input type="text" id="4" name="4">
+            
+            <!-- Контейнер для кнопок -->
+            <div class="button-container">
+                <button type="submit">Отправить</button>
+                <button type="button" onclick="window.location.href='/reviews'">Посмотреть рецензии других пользователей</button>
+            </div>
         </form>
-
-        <div id="message" class="message"></div>
     </div>
-
-    <script>
-        document.getElementById('add-book-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData.entries());
-
-            try {
-                const response = await fetch('/add_book', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-                if (result.redirect) {
-                    window.location.href = result.redirect;
-                } else {
-                    document.getElementById('message').textContent = result.message || 'Error occurred while adding the book.';
-                }
-            } catch (error) {
-                document.getElementById('message').textContent = 'Error occurred while adding the book.';
-                console.error(error);
-            }
-        });
-    </script>
 </body>
 </html>

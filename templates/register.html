@@ -13,30 +13,36 @@
             color: #ffffff;
         }
 
-        .navbar {
-            display: flex;
+        .top-panel {
             position: fixed;
             top: 0;
-            width: 100vw;
+            left: 0;
+            width: 100%;
+            background-color: #be461e;
+            color: white;
+            padding-left: 5px;
+            padding-top: 7px;
+            padding-bottom: 5px;
+            padding-right: 5px;
+            z-index: 1000;
+            display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: #b34820;
-            padding: 10px 10px;
         }
 
-        .navbar .logo {
+        .top-panel .logo {
             width: 40px;
             height: 40px;
         }
 
-        .navbar nav a {
+        .top-panel nav a {
             margin: 0 15px;
             color: #ffffff;
             text-decoration: none;
             font-size: 16px;
         }
 
-        .navbar nav a:hover {
+        .top-panel nav a:hover {
             text-decoration: underline;
         }
 
@@ -45,7 +51,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: calc(100vh - 100px);
+            height: calc(100vh - 100px); /* Отступ от панели */
             padding: 20px;
             margin-top: 60px;
         }
@@ -118,7 +124,7 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
+    <div class="top-panel">
         <img src="/favicon.ico" alt="Logo" class="logo">
         <nav>
             <a href="/">Главная</a>
@@ -126,6 +132,7 @@
             <a href="/register">Зарегистрироваться</a>
         </nav>
     </div>
+
     <div class="registration-container">
         <div class="registration-header">Регистрация</div>
         <form id="registration-form" class="registration-form">
@@ -137,6 +144,7 @@
             <div id="flash-container"></div>
         </form>
     </div>
+
     <script>
         document.getElementById("registration-form").addEventListener("submit", async function(event) {
             event.preventDefault();
@@ -154,9 +162,7 @@
                 } else {
                     const flashContainer = document.getElementById("flash-container");
                     flashContainer.innerHTML = `
-                        <div class="flash-message message-${result.category}">
-                            ${result.message}
-                        </div>
+                        <div class="flash-message message-${result.category}">${result.message}</div>
                     `;
                 }
             } catch (error) {

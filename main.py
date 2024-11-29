@@ -92,5 +92,11 @@ def publication():
         return redirect("/")
     return render_template("publication.html")
 
+@app.route("/review")
+def review():
+    if "username" not in session:
+        return redirect("/")
+    return render_template("review.html")
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
