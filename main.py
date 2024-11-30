@@ -5,6 +5,14 @@ import hashlib
 app = Flask("Website")
 app.secret_key = db.sekretKey
 
+@app.route("/sorian")
+def sorian():
+    return render_template("sorian.html")
+
+@app.route("/girl.png")
+def girl():
+    return send_file("files/girl.png", mimetype="image/png")
+
 @app.route("/background.png")
 def background():
     return send_file("files/background.png", mimetype="image/png")

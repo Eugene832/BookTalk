@@ -124,6 +124,52 @@
         .top-panel nav a:hover {
             text-decoration: underline;
         }
+
+        .girl {
+            background-color: #d9d8d6;
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 900px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .girl h1 {
+            color: black;
+            font-size: 30px;
+            margin: 0;
+        }
+        
+        .girl img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px
+        }
+
+        .buttons a {
+            background-color: #be461e;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -134,6 +180,15 @@
             <a href="/login">Войти</a>
             <a href="/register">Зарегистрироваться</a>
         </nav>
+    </div>
+
+    <div class = "girl">
+    <h1>Хотите опробовать свои писательские навыки? Попробуйте наш тренажёр и станьте профессионалом своего дела!</h1>
+    <div class="buttons">
+        <a href="/sorian">Опробовать тренажёр</a>
+        <a href="/sorian">Рекомендации для начинающих авторов</a>
+    </div>
+    <img src="/girl.png">
     </div>
 
     <div id="books-container">
