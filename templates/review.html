@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Book</title>
+    <title>BookTalk</title>
     <style>
         body {
             font-family: montserrat;
@@ -96,19 +96,17 @@
             color: white;
             border: none;
             border-radius: 15px;
-            font-size: 14px; /* Уменьшаем размер шрифта */
+            font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
-        /* Меньшая кнопка "Отправить" */
-        button[type="submit"] {
-            width: 40%; /* Уменьшаем ширину */
+        button[type="t1"] {
+            width: 40%;
         }
 
-        /* Кнопка "Посмотреть рецензии" больше */
-        button[type="button"] {
-            width: 55%; /* Увеличиваем ширину */
+        button[type="t2"] {
+            width: 55%;
         }
 
         button:hover {
@@ -142,7 +140,7 @@
     </div>
 
     <div class="container">
-        <form id="add-book-form" method="POST">
+        <div id="add-book-form">
             <h1>Сюжет</h1>
             <input type="text" id="1" name="1">
             <h1>Логичность</h1>
@@ -152,10 +150,9 @@
             <h1>Язык</h1>
             <input type="text" id="4" name="4">
             
-            <!-- Контейнер для кнопок -->
             <div class="button-container">
-                <button type="submit">Отправить</button>
-                <button type="button" onclick="window.location.href='/reviews'">Посмотреть рецензии других пользователей</button>
+                <button type="t1" onclick="window.location.href='/sorian'">Отправить</button>
+                <button type="t2" onclick="window.location.href='/sorian'">Посмотреть рецензии других пользователей</button>
             </div>
         </form>
     </div>
